@@ -1,0 +1,22 @@
+{
+  "name": "fantasyinternet.wast",
+  "version": "0.0.1",
+  "description": "wast library for making programs for the fantasy internet",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FantasyInternet/fantasyinternet.wast.git"
+  },
+  "keywords": [
+    "wast",
+    "wasm",
+    "webassembly",
+    "fantasyinternet",
+    "waquire"
+  ],
+  "author": "codeartisticninja",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FantasyInternet/fantasyinternet.wast/issues"
+  },
+  "homepage": "https://github.com/FantasyInternet/fantasyinternet.wast#readme"
+}
