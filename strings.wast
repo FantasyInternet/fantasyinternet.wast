@@ -179,6 +179,9 @@
     (set_local $order (i32.div_u (get_local $order) (i32.const 10)))
     (br 0)
   ))
+  (if (i32.eqz (call $mem.getPartLength (get_local $str)))(then
+    (call $appendBytes (get_local $str) (i64.const 0x30) )
+  ))
   (get_local $str)
 )
 
