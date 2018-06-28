@@ -18,6 +18,7 @@
 (global $selstart (mut i32) (i32.const 0))
 (global $selend (mut i32) (i32.const 0))
 (global $input (mut i32) (i32.const 0))
+(global $inputLen (mut i32) (i32.const 0))
 
 (func $step (result i32)
   (local $key i32)
@@ -75,8 +76,11 @@
       (call $str.printStr (call $utf8.substr (get_global $input) (call $getInputPosition) (call $getInputSelected)))
       (call $str.printStr (get_global $selend))
       (call $str.printStr (call $utf8.substr (get_global $input) (i32.add (call $getInputPosition) (call $getInputSelected)) (i32.sub (call $mem.getPartLength (get_global $input)) (i32.add (call $getInputPosition) (call $getInputSelected)))))
-      (call $str.printStr (get_global $clear))
+      (if (i32.lt_u (call $mem.getPartLength (get_global $input)) (get_global $inputLen))(then
+        (call $str.printStr (get_global $clear))
+      ))
       (call $str.printStr (get_global $restore))
+      (set_global $inputLen (call $mem.getPartLength (get_global $input)))
       (set_local $result (i32.const 0))
     ))
   ))
