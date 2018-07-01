@@ -17,6 +17,7 @@
 (global $nl (mut i32) (i32.const 0))
 (global $selstart (mut i32) (i32.const 0))
 (global $selend (mut i32) (i32.const 0))
+(global $_input (mut i32) (i32.const 0))
 (global $input (mut i32) (i32.const 0))
 (global $inputLen (mut i32) (i32.const 0))
 
@@ -51,15 +52,18 @@
     (call $str.appendBytes (get_global $selend) (i64.const 0x6d305b1b))
   ))
   (if (i32.eqz (get_global $input))(then
+    (set_global $_input (call $mem.createPart (i32.const 0)))
     (set_global $input (call $mem.createPart (i32.const 0)))
   ))
   (set_global $mem.parentPart (get_local $parentPart))
   (call $mem.enterPart (call $mem.createPart (i32.const 0)))
-  (call $mem.resizePart (get_global $input) (call $getInputText))
-  (call $popToMemory (call $mem.getPartOffset (get_global $input)))
+  (call $mem.resizePart (get_global $_input) (call $getInputText))
+  (call $popToMemory (call $mem.getPartOffset (get_global $_input)))
   (set_local $key (call $getInputKey))
   (if (get_local $key)(then
     (if (i32.eq (get_local $key) (i32.const 13))(then
+      (call $mem.resizePart (get_global $input) (call $getInputText))
+      (call $popToMemory (call $mem.getPartOffset (get_global $input)))
       (call $setInputText (call $pushFromMemory (i32.const 0) (i32.const 0)))
       (call $str.trim (get_global $input))
       (call $str.printStr (get_global $restore))
@@ -70,17 +74,17 @@
     )(else
       (call $str.printStr (get_global $restore))
       (call $str.printStr (get_global $save))
-      (call $str.printStr (call $utf8.substr (get_global $input) (i32.const 0) (call $getInputPosition)))
+      (call $str.printStr (call $utf8.substr (get_global $_input) (i32.const 0) (call $getInputPosition)))
       (call $str.printStr (get_global $save))
       (call $str.printStr (get_global $selstart))
-      (call $str.printStr (call $utf8.substr (get_global $input) (call $getInputPosition) (call $getInputSelected)))
+      (call $str.printStr (call $utf8.substr (get_global $_input) (call $getInputPosition) (call $getInputSelected)))
       (call $str.printStr (get_global $selend))
-      (call $str.printStr (call $utf8.substr (get_global $input) (i32.add (call $getInputPosition) (call $getInputSelected)) (i32.sub (call $mem.getPartLength (get_global $input)) (i32.add (call $getInputPosition) (call $getInputSelected)))))
-      (if (i32.lt_u (call $mem.getPartLength (get_global $input)) (get_global $inputLen))(then
+      (call $str.printStr (call $utf8.substr (get_global $_input) (i32.add (call $getInputPosition) (call $getInputSelected)) (i32.sub (call $mem.getPartLength (get_global $_input)) (i32.add (call $getInputPosition) (call $getInputSelected)))))
+      (if (i32.lt_u (call $mem.getPartLength (get_global $_input)) (get_global $inputLen))(then
         (call $str.printStr (get_global $clear))
       ))
       (call $str.printStr (get_global $restore))
-      (set_global $inputLen (call $mem.getPartLength (get_global $input)))
+      (set_global $inputLen (call $mem.getPartLength (get_global $_input)))
       (set_local $result (i32.const 0))
     ))
   ))
